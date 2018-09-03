@@ -1,0 +1,14 @@
+{
+  "name": "elm-insertable-index",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "elm-test"
+  },
+  "author": "Yosuke Torii <jinjorweb@gmail.com> (https://github.com/jinjor)",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "elm-test": "^0.19.0-beta6"
+  }
+}
