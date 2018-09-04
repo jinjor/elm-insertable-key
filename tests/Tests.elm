@@ -78,6 +78,10 @@ suite =
         , testBetween "zz" "zzzz" (Just "zz1")
         , testBetween "01" "1" (Just "02")
         , testBetween "01" "2" (Just "1")
+        , testBetween "101" "2" (Just "11")
+        , testBetween "101" "11" (Just "102")
+        , testBetween "101" "21" (Just "2")
+        , testBetween "101" "3" (Just "2")
         , testBetween "" "" Nothing
         , testBetween "" "1" Nothing
         , testBetween "1" "" Nothing
