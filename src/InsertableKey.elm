@@ -41,51 +41,24 @@ incrementKey small big current =
             incrementKeyHelp rest current
 
         ( s :: sRest, [] ) ->
+            incrementKey small [ '{' ] current
+
+        ( s :: sRest, b :: bRest ) ->
             let
                 sCode =
                     Char.toCode s
 
+                bCode =
+                    Char.toCode b
+
                 sNext =
                     incrementAlphaNum sCode
             in
-            if sCode == maxCode then
-                if sRest == [] then
-                    Just (current ++ String.fromChar s ++ "1")
-
-                else
-                    incrementKey sRest [] (current ++ String.fromChar (Char.fromCode sCode))
+            if sCode == bCode || sNext == bCode && bRest == [] then
+                incrementKey sRest bRest (current ++ String.fromChar s)
 
             else
                 Just (current ++ String.fromChar (Char.fromCode sNext))
-
-        ( s :: sRest, b :: bRest ) ->
-            case compare s b of
-                LT ->
-                    let
-                        sCode =
-                            Char.toCode s
-
-                        bCode =
-                            Char.toCode b
-
-                        sNext =
-                            incrementAlphaNum sCode
-                    in
-                    if sNext == bCode then
-                        if bRest == [] then
-                            incrementKey sRest bRest (current ++ String.fromChar s)
-
-                        else
-                            Just (current ++ String.fromChar (Char.fromCode sNext))
-
-                    else
-                        Just (current ++ String.fromChar (Char.fromCode sNext))
-
-                EQ ->
-                    incrementKey sRest bRest (current ++ String.fromChar s)
-
-                GT ->
-                    Nothing
 
 
 incrementKeyHelp : List Char -> String -> Maybe Key
