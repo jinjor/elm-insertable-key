@@ -1,7 +1,7 @@
 {
   "type": "package",
   "name": "jinjor/elm-insertable-key",
-  "summary": "",
+  "summary": "Generates a new key between two keys",
   "license": "BSD-3-Clause",
   "version": "1.0.0",
   "exposed-modules": ["InsertableKey"],

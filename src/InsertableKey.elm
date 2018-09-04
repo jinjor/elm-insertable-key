@@ -1,7 +1,7 @@
 module InsertableKey exposing
-    ( init, before, after, between
+    ( Key
+    , init, before, after, between
     , isValid
-    , Key
     )
 
 {-| InsertableKey
@@ -25,6 +25,11 @@ Generates a new key between two keys.
                                 ( left, center, right )
                             )
                 )
+
+
+# Type
+
+@docs Key
 
 
 # Generate
