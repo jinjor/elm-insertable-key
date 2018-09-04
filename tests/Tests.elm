@@ -44,9 +44,8 @@ suite =
         , testAfter "zy" (Just "zz")
         , testAfter "zz" (Just "zz1")
         , testAfter "zz1" (Just "zz2")
-
-        -- , testAfter "a1" (Just "b")
-        -- , testAfter "az" (Just "b")
+        , testAfter "a1" (Just "b")
+        , testAfter "az" (Just "b")
         , testAfter "{" Nothing
         , testAfter "|" Nothing
         , testBewtween "1" "3" (Just "2")
@@ -56,19 +55,18 @@ suite =
         , testBewtween "1" "101" (Just "1001")
         , testBewtween "1" "1001" (Just "10001")
         , testBewtween "11" "2" (Just "12")
-
-        -- , testBewtween "11" "3" (Just "2")
+        , testBewtween "11" "3" (Just "2")
         , testBewtween "19" "2" (Just "1A")
         , testBewtween "1Z" "2" (Just "1a")
         , testBewtween "11" "12" (Just "111")
         , testBewtween "11" "111" (Just "1101")
         , testBewtween "11" "112" (Just "111")
         , testBewtween "11" "1111" (Just "111")
+        , testBewtween "11" "1101" (Just "11001")
         , testBewtween "11" "13" (Just "12")
         , testBewtween "19" "1A" (Just "191")
         , testBewtween "1Z" "1a" (Just "1Z1")
-
-        -- , testBewtween "1a" "2a" (Just "2")
+        , testBewtween "1a" "2a" (Just "2")
         , testBewtween "1z" "2" (Just "1z1")
         , testBewtween "z" "z1" (Just "z01")
         , testBewtween "zy" "zz" (Just "zy1")

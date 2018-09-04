@@ -1,4 +1,4 @@
-module InsertableKey exposing (after, before, between, init, Key)
+module InsertableKey exposing (Key, after, before, between, init)
 
 {-| -}
 
@@ -28,62 +28,80 @@ between : Key -> Key -> Maybe Key
 between a b =
     case compare a b of
         LT ->
-            betweenHelp a b
+            incrementKey (String.toList a) (String.toList b) ""
 
         _ ->
             Nothing
 
 
-betweenHelp : Key -> Key -> Maybe Key
-betweenHelp small big =
-    incrementKey small
-        |> Maybe.andThen
-            (\afterSmall ->
-                case compare afterSmall big of
-                    LT ->
-                        Just afterSmall
+incrementKey : List Char -> List Char -> String -> Maybe Key
+incrementKey small big current =
+    case ( small, big ) of
+        ( [], rest ) ->
+            incrementKeyHelp rest current
 
-                    EQ ->
-                        if small ++ "1" == big then
-                            betweenHelp (small ++ "0") big
+        ( s :: sRest, [] ) ->
+            let
+                sCode =
+                    Char.toCode s
 
-                        else
-                            Just (small ++ "1")
-
-                    GT ->
-                        if small ++ "0" == big then
-                            Nothing
-
-                        else
-                            betweenHelp (small ++ "0") big
-            )
-
-
-incrementKey : Key -> Maybe Key
-incrementKey key =
-    String.uncons (String.right 1 key)
-        |> Maybe.andThen
-            (\( c, _ ) ->
-                let
-                    code =
-                        Char.toCode c
-
-                    next =
-                        incrementAlphaNum code
-                in
-                if code == maxCode then
-                    Just (String.fromChar c ++ "1")
-
-                else if isValid next then
-                    Just (String.fromChar (Char.fromCode next))
+                sNext =
+                    incrementAlphaNum sCode
+            in
+            if sCode == maxCode then
+                if sRest == [] then
+                    Just (current ++ String.fromChar s ++ "1")
 
                 else
+                    incrementKey sRest [] (current ++ String.fromChar (Char.fromCode sCode))
+
+            else
+                Just (current ++ String.fromChar (Char.fromCode sNext))
+
+        ( s :: sRest, b :: bRest ) ->
+            case compare s b of
+                LT ->
+                    let
+                        sCode =
+                            Char.toCode s
+
+                        bCode =
+                            Char.toCode b
+
+                        sNext =
+                            incrementAlphaNum sCode
+                    in
+                    if sNext == bCode then
+                        if bRest == [] then
+                            incrementKey sRest bRest (current ++ String.fromChar s)
+
+                        else
+                            Just (current ++ String.fromChar (Char.fromCode sNext))
+
+                    else
+                        Just (current ++ String.fromChar (Char.fromCode sNext))
+
+                EQ ->
+                    incrementKey sRest bRest (current ++ String.fromChar s)
+
+                GT ->
                     Nothing
-            )
-        |> Maybe.map
-            (\tail ->
-                String.dropRight 1 key ++ tail
-            )
+
+
+incrementKeyHelp : List Char -> String -> Maybe Key
+incrementKeyHelp tail current =
+    case tail of
+        '0' :: [] ->
+            Nothing
+
+        '0' :: rest ->
+            incrementKeyHelp rest (current ++ "0")
+
+        '1' :: [] ->
+            Just (current ++ "01")
+
+        _ ->
+            Just (current ++ "1")
 
 
 incrementAlphaNum : Int -> Int
