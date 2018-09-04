@@ -16,42 +16,38 @@ init =
 
 before : Key -> Maybe Key
 before key =
-    case compare key "{" of
-        LT ->
-            betweenHelp "0" key
+    if key < "{" then
+        betweenHelp "0" key
 
-        _ ->
-            Nothing
+    else
+        Nothing
 
 
 after : Key -> Maybe Key
 after key =
-    case compare "0" key of
-        LT ->
-            betweenHelp key "{"
+    if "0" < key then
+        betweenHelp key "{"
 
-        _ ->
-            Nothing
+    else
+        Nothing
 
 
 between : Key -> Key -> Maybe Key
 between a b =
-    case ( compare "0" a, compare b "{" ) of
-        ( LT, LT ) ->
-            betweenHelp a b
+    if "0" < a && b < "{" then
+        betweenHelp a b
 
-        _ ->
-            Nothing
+    else
+        Nothing
 
 
 betweenHelp : Key -> Key -> Maybe Key
 betweenHelp a b =
-    case compare a b of
-        LT ->
-            incrementKey (String.toList a) (String.toList b) ""
+    if a < b then
+        incrementKey (String.toList a) (String.toList b) ""
 
-        _ ->
-            Nothing
+    else
+        Nothing
 
 
 incrementKey : List Char -> List Char -> String -> Maybe Key
@@ -65,20 +61,17 @@ incrementKey small big current =
 
         ( s :: sRest, b :: bRest ) ->
             let
-                sCode =
-                    Char.toCode s
-
-                bCode =
-                    Char.toCode b
-
-                sNext =
-                    incrementAlphaNum sCode
+                next =
+                    s
+                        |> Char.toCode
+                        |> incrementAlphaNum
+                        |> Char.fromCode
             in
-            if sCode == bCode || sNext == bCode && bRest == [] then
+            if s == b || next == b && bRest == [] then
                 incrementKey sRest bRest (current ++ String.fromChar s)
 
             else
-                Just (current ++ String.fromChar (Char.fromCode sNext))
+                Just (current ++ String.fromChar next)
 
 
 incrementKeyHelp : List Char -> String -> Maybe Key
