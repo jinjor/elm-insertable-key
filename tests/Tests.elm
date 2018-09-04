@@ -19,8 +19,8 @@ testBefore big result =
             Expect.equal result (InsertableKey.before big)
 
 
-testBewtween : Key -> Key -> Maybe Key -> Test
-testBewtween small big result =
+testBetween : Key -> Key -> Maybe Key -> Test
+testBetween small big result =
     test ("can generate correct key between " ++ small ++ " and " ++ big) <|
         \_ ->
             Expect.equal result (InsertableKey.between small big)
@@ -36,6 +36,7 @@ suite =
         , testBefore "z" (Just "1")
         , testBefore "0" Nothing
         , testBefore "/" Nothing
+        , testBefore "{" Nothing
         , testAfter "1" (Just "2")
         , testAfter "9" (Just "A")
         , testAfter "Z" (Just "a")
@@ -48,28 +49,36 @@ suite =
         , testAfter "az" (Just "b")
         , testAfter "{" Nothing
         , testAfter "|" Nothing
-        , testBewtween "1" "3" (Just "2")
-        , testBewtween "1" "2" (Just "11")
-        , testBewtween "1" "11" (Just "101")
-        , testBewtween "1" "12" (Just "11")
-        , testBewtween "1" "101" (Just "1001")
-        , testBewtween "1" "1001" (Just "10001")
-        , testBewtween "11" "2" (Just "12")
-        , testBewtween "11" "3" (Just "2")
-        , testBewtween "19" "2" (Just "1A")
-        , testBewtween "1Z" "2" (Just "1a")
-        , testBewtween "11" "12" (Just "111")
-        , testBewtween "11" "111" (Just "1101")
-        , testBewtween "11" "112" (Just "111")
-        , testBewtween "11" "1111" (Just "111")
-        , testBewtween "11" "1101" (Just "11001")
-        , testBewtween "11" "13" (Just "12")
-        , testBewtween "19" "1A" (Just "191")
-        , testBewtween "1Z" "1a" (Just "1Z1")
-        , testBewtween "1a" "2a" (Just "2")
-        , testBewtween "1z" "2" (Just "1z1")
-        , testBewtween "z" "z1" (Just "z01")
-        , testBewtween "zy" "zz" (Just "zy1")
-        , testBewtween "zz" "zz1" (Just "zz01")
-        , testBewtween "zz" "zz01" (Just "zz001")
+        , testAfter "0" Nothing
+        , testBetween "1" "3" (Just "2")
+        , testBetween "1" "2" (Just "11")
+        , testBetween "1" "11" (Just "101")
+        , testBetween "1" "12" (Just "11")
+        , testBetween "1" "101" (Just "1001")
+        , testBetween "1" "1001" (Just "10001")
+        , testBetween "11" "2" (Just "12")
+        , testBetween "11" "3" (Just "2")
+        , testBetween "19" "2" (Just "1A")
+        , testBetween "1Z" "2" (Just "1a")
+        , testBetween "11" "12" (Just "111")
+        , testBetween "11" "111" (Just "1101")
+        , testBetween "11" "112" (Just "111")
+        , testBetween "11" "1111" (Just "111")
+        , testBetween "11" "1101" (Just "11001")
+        , testBetween "11" "13" (Just "12")
+        , testBetween "19" "1A" (Just "191")
+        , testBetween "1Z" "1a" (Just "1Z1")
+        , testBetween "1a" "2a" (Just "2")
+        , testBetween "1z" "2" (Just "1z1")
+        , testBetween "z" "z1" (Just "z01")
+        , testBetween "zy" "zz" (Just "zy1")
+        , testBetween "zz" "zz1" (Just "zz01")
+        , testBetween "zz" "zz01" (Just "zz001")
+        , testBetween "" "" Nothing
+        , testBetween "" "1" Nothing
+        , testBetween "1" "" Nothing
+        , testBetween "1" "1" Nothing
+        , testBetween "2" "1" Nothing
+        , testBetween "0" "1" Nothing
+        , testBetween "1" "{" Nothing
         ]

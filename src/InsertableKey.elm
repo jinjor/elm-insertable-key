@@ -16,16 +16,36 @@ init =
 
 before : Key -> Maybe Key
 before key =
-    between "0" key
+    case compare key "{" of
+        LT ->
+            betweenHelp "0" key
+
+        _ ->
+            Nothing
 
 
 after : Key -> Maybe Key
 after key =
-    between key "{"
+    case compare "0" key of
+        LT ->
+            betweenHelp key "{"
+
+        _ ->
+            Nothing
 
 
 between : Key -> Key -> Maybe Key
 between a b =
+    case ( compare "0" a, compare b "{" ) of
+        ( LT, LT ) ->
+            betweenHelp a b
+
+        _ ->
+            Nothing
+
+
+betweenHelp : Key -> Key -> Maybe Key
+betweenHelp a b =
     case compare a b of
         LT ->
             incrementKey (String.toList a) (String.toList b) ""
