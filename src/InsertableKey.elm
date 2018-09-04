@@ -1,19 +1,45 @@
-module InsertableKey exposing (Key, after, before, between, init, isValid)
+module InsertableKey exposing
+    ( init, before, after, between
+    , isValid
+    , Key
+    )
 
-{-| -}
+{-| InsertableKey
+
+Generates a new key between two keys.
+
+
+## Generate
+
+@docs init, before, after, between
+
+
+## Validate
+
+@docs isValid
+
+-}
 
 import Char
 
 
+{-| The key.
+This type is an alias of `String` so you can use this as Dict keys.
+It is highly recommended to always generate key using this module.
+-}
 type alias Key =
     String
 
 
+{-| The initial key.
+-}
 init : Key
 init =
     "1"
 
 
+{-| Generates a key before given key.
+-}
 before : Key -> Maybe Key
 before key =
     if isValid key then
@@ -23,6 +49,8 @@ before key =
         Nothing
 
 
+{-| Generates a key after given key.
+-}
 after : Key -> Maybe Key
 after key =
     if isValid key then
@@ -32,6 +60,8 @@ after key =
         Nothing
 
 
+{-| Generates a key between given keys.
+-}
 between : Key -> Key -> Maybe Key
 between a b =
     if isValid a && isValid b then
@@ -114,6 +144,9 @@ decrementAlphaNum code =
         code - 1
 
 
+{-| Check if a key is valid or not.
+Basically you don't need this function if you always generate keys using this modele.
+-}
 isValid : Key -> Bool
 isValid key =
     (key /= "")
