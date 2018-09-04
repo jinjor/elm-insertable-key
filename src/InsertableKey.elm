@@ -8,13 +8,31 @@ module InsertableKey exposing
 
 Generates a new key between two keys.
 
+    import InsertableKey exposing (Key, after, before, between, init)
 
-## Generate
+    generateThreeKeys : Maybe ( Key, Key, Key )
+    generateThreeKeys =
+        let
+            left =
+                init
+        in
+        after left
+            |> Maybe.andThen
+                (\right ->
+                    between first right
+                        |> Maybe.map
+                            (\center ->
+                                ( left, center, right )
+                            )
+                )
+
+
+# Generate
 
 @docs init, before, after, between
 
 
-## Validate
+# Validate
 
 @docs isValid
 

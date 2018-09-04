@@ -27,6 +27,28 @@ This library gives you a new key `21`.
 
 This can be useful, when you use RDB and change the order without rearranging all of the rows.
 
+## Example
+
+```elm
+import InsertableKey exposing (Key, after, before, between, init)
+
+generateThreeKeys : Maybe ( Key, Key, Key )
+generateThreeKeys =
+    let
+        left =
+            init
+    in
+    after left
+        |> Maybe.andThen
+            (\right ->
+                between first right
+                    |> Maybe.map
+                        (\center ->
+                            ( left, center, right )
+                        )
+            )
+```
+
 ## LICENSE
 
 BSD-3-Clause
