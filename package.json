@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "elm-test"
+    "test": "elm-test --fuzz 100000 --seed 14197656147382"
   },
   "author": "Yosuke Torii <jinjorweb@gmail.com> (https://github.com/jinjor)",
   "license": "BSD-3-Clause",

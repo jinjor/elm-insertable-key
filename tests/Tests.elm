@@ -1,8 +1,9 @@
-module Tests exposing (suite)
+module Tests exposing (suite, testRandom)
 
 import Expect exposing (Expectation)
+import Fuzz exposing (..)
 import InsertableKey exposing (Key)
-import Test exposing (Test, describe, test)
+import Test exposing (Test, describe, fuzz, test)
 
 
 testAfter : Key -> Maybe Key -> Test
@@ -24,6 +25,67 @@ testBetween small big result =
     test ("can generate correct key between " ++ small ++ " and " ++ big) <|
         \_ ->
             Expect.equal result (InsertableKey.between small big)
+
+
+testRandom : Test
+testRandom =
+    fuzz fuzzKeyPair "can generate correct key between any keys" <|
+        \maybePair ->
+            case maybePair of
+                Just ( small, big ) ->
+                    case InsertableKey.between small big of
+                        Just newKey ->
+                            newKey
+                                |> Expect.all
+                                    [ Expect.greaterThan small
+                                    , Expect.lessThan big
+                                    ]
+
+                        Nothing ->
+                            Expect.fail "unexpected"
+
+                Nothing ->
+                    Expect.pass
+
+
+fuzzKeyPair : Fuzzer (Maybe ( Key, Key ))
+fuzzKeyPair =
+    map2
+        (\key1 key2 ->
+            if InsertableKey.isValid key1 && InsertableKey.isValid key2 then
+                if key1 < key2 then
+                    Just ( key1, key2 )
+
+                else if key1 > key2 then
+                    Just ( key2, key1 )
+
+                else
+                    Nothing
+
+            else
+                Nothing
+        )
+        fuzzKey
+        fuzzKey
+
+
+fuzzKey : Fuzzer Key
+fuzzKey =
+    list fuzzAlphaNum
+        |> map String.fromList
+
+
+fuzzAlphaNum : Fuzzer Char
+fuzzAlphaNum =
+    frequency
+        [ ( 20, constant '0' )
+        , ( 20, constant '1' )
+        , ( 1, constant '9' )
+        , ( 1, constant 'A' )
+        , ( 1, constant 'Z' )
+        , ( 1, constant 'a' )
+        , ( 20, constant 'z' )
+        ]
 
 
 suite : Test

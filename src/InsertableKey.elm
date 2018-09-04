@@ -1,4 +1,4 @@
-module InsertableKey exposing (Key, after, before, between, init)
+module InsertableKey exposing (Key, after, before, between, init, isValid)
 
 {-| -}
 
@@ -16,7 +16,7 @@ init =
 
 before : Key -> Maybe Key
 before key =
-    if key < "{" then
+    if isValid key then
         betweenHelp "0" key
 
     else
@@ -25,7 +25,7 @@ before key =
 
 after : Key -> Maybe Key
 after key =
-    if "0" < key then
+    if isValid key then
         betweenHelp key "{"
 
     else
@@ -34,7 +34,7 @@ after key =
 
 between : Key -> Key -> Maybe Key
 between a b =
-    if "0" < a && b < "{" then
+    if isValid a && isValid b then
         betweenHelp a b
 
     else
@@ -114,8 +114,21 @@ decrementAlphaNum code =
         code - 1
 
 
-isValid : Int -> Bool
-isValid n =
+isValid : Key -> Bool
+isValid key =
+    (key /= "")
+        && (key > "0")
+        && (key < "{")
+        && (String.right 1 key /= "0")
+        && List.all isAlphaNum (String.toList key)
+
+
+isAlphaNum : Char -> Bool
+isAlphaNum c =
+    let
+        n =
+            Char.toCode c
+    in
     n >= 48 && n <= 57 || n >= 65 && n <= 90 || n >= 97 && n <= 122
 
 
