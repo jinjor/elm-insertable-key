@@ -71,7 +71,7 @@ generateThreeKeys =
 
 This works well at least *for my use case*, but there should be better algorithm to do this.
 
-- Key may be too long as row increases. The key after `z` is `z1`, and the key after `zz` is `zz1`. This means simply incrementing key until `N` results in the key length `N / 62`. So the length is `16` when we have 1000 rows but `160` when we have 1000. Considering UUID is 36 chars, `N = 2000` would be a good limit.
+- Key may be too long as row increases. The key after `z` is `z1`, and the key after `zz` is `zz1`. This means simply incrementing key until `N` results in the key length `N / 62`. So the length is `16` when we have 1000 rows and `160` when we have 10000. Considering UUID is 36 chars, `N = 2000` would be a good limit.
 - Key may be also too long when continuousely generating key between an integer and the next one, like `11`, `101`, `1001`, `10001` ... `100000000001`. I think this should be fixed if a key is chosen which is placed near the center of two keys.
 
 If you have some information about this problem, please let me know. Forking and publishing your own is also welcome!
