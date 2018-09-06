@@ -19,7 +19,7 @@ Generates a new key between two keys.
         after left
             |> Maybe.andThen
                 (\right ->
-                    between first right
+                    between left right
                         |> Maybe.map
                             (\center ->
                                 ( left, center, right )
